@@ -20,7 +20,7 @@ parser.add_argument(
 args = parser.parse_args()
 dir_path = args.dir_path
 
-llm = Ollama(model="llama2", request_timeout=30.0)
+llm = Ollama(model="llama2", request_timeout=12000.0)
 embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-mpnet-base-v2")
 service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
 set_global_service_context(service_context)
