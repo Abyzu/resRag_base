@@ -1,6 +1,6 @@
 import gradio as gr
 
-# from model import LLM
+from model import LLM
 from llama_index.llms.ollama import Ollama
 from vector_store import FaissStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -20,9 +20,11 @@ parser.add_argument(
 args = parser.parse_args()
 dir_path = args.dir_path
 
-llm = Ollama(model="llama2", request_timeout=12000.0)
-embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-mpnet-base-v2")
-service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
+llm = LLM()
+embed_model = HuggingFaceEmbedding(
+    model_name="sentence-transformers/all-mpnet-base-v2")
+service_context = ServiceContext.from_defaults(
+    llm=llm, embed_model=embed_model)
 set_global_service_context(service_context)
 
 faiss_store = FaissStore(dir_path)

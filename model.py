@@ -1,3 +1,5 @@
+import torch
+from transformers import BitsAndBytesConfig
 from llama_index.llms.huggingface import HuggingFaceLLM
 
 
@@ -6,10 +8,17 @@ class LLM(HuggingFaceLLM):
         self,
         context_window: int = 4096,
         max_new_tokens: int = 2048,
-        model_name: str = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
-        tokenizer_name="TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
+        model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        tokenizer_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
         device_map="auto",
-        model_kwargs={"torch_dtype": torch.float16, "load_in_4bit": True},
+        model_kwargs={
+            "quantization_config": BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True,
+            ),
+        },
         generate_kwargs={"temperature": 0.0, "do_sample": False},
     ) -> None:
         super().__init__(
